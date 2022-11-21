@@ -1,7 +1,6 @@
-package http_controllers
+package utils
 
 import (
-    "encoding/json"
     "log"
     "net/http"
 )
@@ -12,11 +11,11 @@ func ControllerRecover(w http.ResponseWriter, r *http.Request) {
     if recovered := recover(); recovered != nil {
         err := recovered.(error)
         if err.Error() == "no rows in result set" {
-            resp, err := json.Marshal(struct {}{})
-            if err != nil { ControllerRecover(w, r) }
             w.Header().Set("Content-Type", "application/json")
             w.WriteHeader(http.StatusNotFound)
-            _, err = w.Write(resp)
+        } else if err.Error() == "400" {
+            w.Header().Set("Content-Type", "application/json")
+            w.WriteHeader(http.StatusBadRequest)
         } else {
             log.Println(err)
             w.Header().Set("Content-Type", "application/json")
