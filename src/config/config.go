@@ -10,10 +10,11 @@ import (
 
 type Config struct {
     EnvironmentId    int
-    Environment      string         // dev/prod
+    EnvironmentTitle string
     Network          string         // evm
     ChainID          *big.Int       // 1/5
     FactoryAddress   common.Address
+    ApiUrl           string
 
     // Do not edit JSON tags below!
     DbConnStr        string
@@ -32,10 +33,11 @@ func Init()  {
 
 var ethDevConfig = &Config{
     EnvironmentId:    1,
-    Environment:      "dev",
+    EnvironmentTitle: "Goerly",
     Network:          "evm",
     ChainID:          big.NewInt(5),
     FactoryAddress:   common.HexToAddress("0x272d3c265600f99f024451d2cdfd48e8e549dcba"),
+    ApiUrl:           "https://dolphin-app-mays8.ondigitalocean.app",
 
     DbConnStr:        os.Getenv("DB_DEV"),
     RpcWs:            os.Getenv("RPC_WS"),
@@ -47,13 +49,13 @@ func (c *Config) MarshalJSON() (resp []byte, err error) {
     type Alias Config
     resp, err = json.Marshal(&struct {
         EnvironmentId    int               `json:"environment_id"`
-        Environment      string            `json:"environment"`     // dev/prod
+        EnvironmentTitle string            `json:"environment_title"`
         Network          string            `json:"network"`         // evm
         ChainID          *big.Int          `json:"chain_id"`        // 1/5
         FactoryAddress   common.Address    `json:"factory_address"`
     }{
         EnvironmentId: c.EnvironmentId,
-        Environment: c.Environment,
+        EnvironmentTitle: c.EnvironmentTitle,
         Network: c.Network,
         ChainID: c.ChainID,
         FactoryAddress: c.FactoryAddress,
