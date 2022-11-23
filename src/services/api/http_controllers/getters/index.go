@@ -11,7 +11,6 @@ import (
 
 var once sync.Once
 func Index(w http.ResponseWriter, r *http.Request) {
-
     defer utils.ControllerRecover(w, r) // Handles panic(err)
 
     once.Do(func() {  // The notify will be sent during healthchek procedure
