@@ -9,6 +9,12 @@ import (
 
 type Dao struct {
     Id          *int    `json:"id"`
+
+    Name        string  `json:"name"`
+    Description string  `json:"description"`
+    Link        string  `json:"link"`
+    Image       string  `json:"image"`
+
     Parent      *int    `json:"parent"`
     Registry    string  `json:"registry"`
     Governance  string  `json:"governance"`
@@ -25,7 +31,7 @@ func (d *Dao) Create() (err error)  {
 
 func (d *Dao) Get(id int) (err error) {
     row := db.Instance().QueryRow(queries.Dao.Get, id)
-    err = row.Scan(&d.Creator, &d.Parent, &d.Registry, &d.Governance)
+    err = row.Scan(&d.Name, &d.Description, &d.Link, &d.Image, &d.Creator, &d.Parent, &d.Registry, &d.Governance)
     d.Id = &id
     return err
 }
@@ -44,7 +50,10 @@ func (d *Dao) Aggregate(offset uint64, limit uint64, args ...interface{}) (res e
         entity := &Dao{}
         err = rows.Scan(
             &res.Total,
-            &entity.Id,
+            &entity.Name,
+            &entity.Description,
+            &entity.Link,
+            &entity.Image,
             &entity.Creator,
             &entity.Parent,
             &entity.Registry,
